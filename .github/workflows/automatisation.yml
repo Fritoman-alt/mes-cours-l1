@@ -1,16 +1,18 @@
 name: Mise à jour automatique 🤖
 
-# Quand est-ce que le robot doit s'allumer ?
 on:
   push:
     branches:
       - main
     paths:
-      - 'cours/**'  # Seulement si on ajoute/supprime un cours
-      - 'maj.py'    # Ou si on modifie le script
+      - 'cours/**'   # Seulement si on ajoute/supprime un cours
+      - 'maj.py'     # Ou si on modifie le script
+  workflow_dispatch:   # Bouton "Run workflow" manuel sur GitHub
 
 jobs:
   update-site:
+    # Évite que le robot re-déclenche lui-même le workflow à l'infini
+    if: github.actor != 'Robot Drive L1'
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Autorise le robot à modifier le site
@@ -27,10 +29,12 @@ jobs:
           python-version: '3.10'
 
       - name: ⚙️ Exécution de ton script maj.py
+        env:
+          # Les identifiants sont stockés en sécurité dans :
+          # Settings → Secrets and variables → Actions → New repository secret
+          DRIVE_LOGIN: ${{ secrets.DRIVE_LOGIN }}
+          DRIVE_MDP: ${{ secrets.DRIVE_MDP }}
         run: |
-          # On donne un faux nom au robot pour qu'il puisse sauvegarder
           git config --global user.name "Robot Drive L1"
           git config --global user.email "robot@github.com"
-          
-          # Le robot appuie sur le bouton Play à ta place !
           python maj.py
