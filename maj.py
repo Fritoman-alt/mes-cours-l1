@@ -32,13 +32,12 @@ NOM_REPO                 = "mes-cours-l1"
 MODE_MAINTENANCE = False
 
 # 🔓 LE BOUTON MOT DE PASSE (True = Code requis / False = Accès direct)
-MOT_DE_PASSE_ACTIF = False
+MOT_DE_PASSE_ACTIF = True
 
-# 🔐 IDENTIFIANTS — récupérés depuis les variables d'environnement GitHub
-# (Settings → Secrets → Actions : DRIVE_LOGIN et DRIVE_MDP)
-# Si absent, les valeurs par défaut ci-dessous sont utilisées (développement local)
-LOGIN_REQUIS = os.environ.get("DRIVE_LOGIN", "L1GI")
-MDP_REQUIS   = os.environ.get("DRIVE_MDP",   "IAD2026")
+# 🔐 IDENTIFIANTS (La correction magique est ici !)
+# Si GitHub ne donne rien, on prend L1GI et IAD2026 par défaut
+LOGIN_REQUIS = os.environ.get("DRIVE_LOGIN") or "L1GI"
+MDP_REQUIS   = os.environ.get("DRIVE_MDP") or "IAD2026"
 
 # ==========================================
 # 📁 2. CONFIGURATION DES DOSSIERS
@@ -55,7 +54,7 @@ noms_annees = {
     "L3": "Licence 3"
 }
 
-# ✅ Dictionnaire propre — clés en minuscules uniquement, lookup insensible à la casse
+# ✅ Dictionnaire propre — clés en minuscules uniquement
 noms_matieres_base = {
     "algebre_lineaire":             "📐 Algèbre Linéaire",
     "algebre lineaire":             "📐 Algèbre Linéaire",
