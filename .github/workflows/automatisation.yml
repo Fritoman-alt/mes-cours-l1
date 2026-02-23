@@ -1,0 +1,36 @@
+name: Mise à jour automatique 🤖
+
+# Quand est-ce que le robot doit s'allumer ?
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cours/**'  # Seulement si on ajoute/supprime un cours
+      - 'maj.py'    # Ou si on modifie le script
+
+jobs:
+  update-site:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Autorise le robot à modifier le site
+
+    steps:
+      - name: 📥 Récupération des fichiers
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Préparation de l'ordinateur virtuel (Python)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: ⚙️ Exécution de ton script maj.py
+        run: |
+          # On donne un faux nom au robot pour qu'il puisse sauvegarder
+          git config --global user.name "Robot Drive L1"
+          git config --global user.email "robot@github.com"
+          
+          # Le robot appuie sur le bouton Play à ta place !
+          python maj.py
