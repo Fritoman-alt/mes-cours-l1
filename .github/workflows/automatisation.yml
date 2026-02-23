@@ -5,17 +5,16 @@ on:
     branches:
       - main
     paths:
-      - 'cours/**'   # Seulement si on ajoute/supprime un cours
-      - 'maj.py'     # Ou si on modifie le script
-  workflow_dispatch:   # Bouton "Run workflow" manuel sur GitHub
+      - 'cours/**'
+      - 'maj.py'
+  workflow_dispatch:
 
 jobs:
   update-site:
-    # Évite que le robot re-déclenche lui-même le workflow à l'infini
     if: github.actor != 'Robot Drive L1'
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Autorise le robot à modifier le site
+      contents: write
 
     steps:
       - name: 📥 Récupération des fichiers
@@ -30,8 +29,6 @@ jobs:
 
       - name: ⚙️ Exécution de ton script maj.py
         env:
-          # Les identifiants sont stockés en sécurité dans :
-          # Settings → Secrets and variables → Actions → New repository secret
           DRIVE_LOGIN: ${{ secrets.DRIVE_LOGIN }}
           DRIVE_MDP: ${{ secrets.DRIVE_MDP }}
         run: |
